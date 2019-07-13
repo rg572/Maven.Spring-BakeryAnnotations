@@ -2,10 +2,18 @@ package com.zipcodewilmington.bakery.services;
 
 import com.zipcodewilmington.bakery.models.Baker;
 import com.zipcodewilmington.bakery.repositories.BakerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+@Service
 public class BakerService {
     private BakerRepository repository;
 
+    @Autowired
     public BakerService(BakerRepository repository) {
         this.repository = repository;
     }
@@ -22,7 +30,8 @@ public class BakerService {
         return repository.save(baker);
     }
 
-    public Baker update(Long id, Baker newBakerData) {
+    @ResponseBody @PutMapping("/bakers/{id}")
+    public Baker update(@PathVariable Long id,@RequestBody Baker newBakerData) {
         Baker originalBaker = repository.findById(id).get();
         originalBaker.setName(newBakerData.getName());
         originalBaker.setSpecialty(newBakerData.getSpecialty());
